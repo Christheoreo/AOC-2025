@@ -1,0 +1,6 @@
+{
+    // Disable Copilot completions in the editor
+    "github.copilot.enable": {
+        "*": false
+    },
+}
