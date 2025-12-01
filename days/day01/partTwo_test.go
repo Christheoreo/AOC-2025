@@ -4,16 +4,16 @@ import (
 	"testing"
 )
 
-func TestPartOne(t *testing.T) {
-	expect := 3
-	got := SolvePartOne(exampleInput)
+func TestPartTwo(t *testing.T) {
+	expect := 6
+	got := SolvePartTwo(exampleInput)
 	if got != expect {
 		t.Fatalf("wanted (%v) but got %v", expect, got)
 	}
 }
 
-func BenchmarkPartOne(b *testing.B) {
+func BenchmarkPartTwo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		SolvePartOne(input)
+		SolvePartTwo(input)
 	}
 }
