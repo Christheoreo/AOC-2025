@@ -47,6 +47,7 @@ func (l *Lock) TurnRightX(x int) {
 	}
 }
 
+// This is a BAD solution, but a working one regardless!
 func SolvePartTwo(input string) int {
 	lines := strings.Split(input, "\n")
 	l := NewLock()
