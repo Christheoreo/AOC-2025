@@ -54,7 +54,6 @@ func SolvePartTwo(input string) int {
 		direction := line[0]
 		numberS := line[1:]
 		num, _ := strconv.Atoi(numberS)
-		// startedAtZero := pointer == 0
 		if direction == 'L' {
 			l.TurnLeftX(num)
 		} else {
@@ -66,6 +65,7 @@ func SolvePartTwo(input string) int {
 	return l.AmountOfLandedOnZero
 }
 
+// Something was off here, will try this again later!
 // func SolvePartTwo(input string) int {
 // 	lines := strings.Split(input, "\n")
 
