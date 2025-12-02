@@ -22,7 +22,7 @@ func SolvePartOne(input string) int {
 				answer += i
 				continue
 			}
-			if isAPattern(i) {
+			if isAPatternPartOne(i) {
 				m[i] = true
 				answer += i
 				continue
@@ -34,7 +34,7 @@ func SolvePartOne(input string) int {
 	return answer
 }
 
-func isAPattern(number int) bool {
+func isAPatternPartOne(number int) bool {
 	s := strconv.Itoa(number)
 
 	if len(s)%2 != 0 {
