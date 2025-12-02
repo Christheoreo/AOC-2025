@@ -43,19 +43,43 @@ func isAPatternPartTwo(number int) bool {
 	// for _, val := range deminators {
 
 	// }
+	l := len(s)
 
-	if len(s)%2 == 0 {
-		halfway := len(s) / 2
+	if l%2 == 0 {
+		halfway := l / 2
 		if s[0:halfway] == s[halfway:] {
 			fmt.Printf("%d was a pattern match!\n", number)
 			return true
+		}
+
+		for i := 1; i < l; i += 1 {
+			if l%i == 0 || i == 1 {
+				// fmt.Printf("here")
+				// lets see if this pattern repeates
+				substr := s[0:i]
+				ss := s[i:]
+				// fmt.Printf("S = %s, I = %d, and substr = %s\n", s, i, substr)
+				for len(ss) > 0 {
+					if ss[0:i] == substr {
+						// fmt.Printf("SS was %s but is now %s\n", ss, ss[i:])
+						ss = ss[i:]
+					} else {
+						break
+					}
+				}
+
+				if len(ss) == 0 {
+					fmt.Printf("%d was a pattern match!\n", number)
+					return true
+				}
+			}
 		}
 		// Even numbers may have a pattern of 2's! ddo below for even
 		return false
 	}
 
 	// if its odd
-	l := len(s)
+
 	for i := 1; i < len(s); i += 2 {
 		if l%i == 0 || i == 1 {
 			// fmt.Printf("here")
