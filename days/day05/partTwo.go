@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"strconv"
 	"strings"
 )
@@ -23,50 +24,44 @@ func SolvePartTwo(input string) int {
 	}
 
 	for {
-		madeAChange := false
+		foundACrossOver := false
 		for i := 0; i < len(ranges); i += 1 {
-			r := ranges[i]
-			if r[0] == 0 && r[1] == 0 {
+
+			if ranges[i][0] == 0 && ranges[i][1] == 0 {
 				continue
 			}
+
 			for k := 0; k < len(ranges); k += 1 {
-				if i == k {
+				if i == k || (ranges[k][0] == 0 && ranges[k][1] == 0) {
 					continue
 				}
+
+				r := ranges[i]
 				rr := ranges[k]
-				if rr[0] == 0 && rr[1] == 0 {
-					continue
-				}
-				localChange := false
 
-				// check if rr can go inside r
-				if rr[0] >= r[0] && rr[1] <= r[1] {
-					ranges[k] = [2]int{0, 0}
-					continue
-				}
-
-				// does the lower boundary need changing?
-				if rr[0] < r[0] && rr[1] >= r[0] {
-					ranges[i][0] = ranges[k][0]
-					// ranges[k] = [2]int{0, 0}
-					madeAChange = true
-					localChange = true
-				}
-
-				// does the upper boundary need changing?
-				if rr[1] > r[1] && rr[0] <= r[1] {
-					ranges[i][1] = ranges[k][1]
-					madeAChange = true
-					localChange = true
-				}
-
-				if localChange {
+				if hasAnyCrossover(r, rr) {
+					foundACrossOver = true
+					ranges[i] = [2]int{
+						int(
+							math.Min(
+								float64(r[0]),
+								float64(rr[0]),
+							),
+						),
+						int(
+							math.Max(
+								float64(r[1]),
+								float64(rr[1]),
+							),
+						),
+					}
 					ranges[k] = [2]int{0, 0}
 				}
 			}
 		}
 
-		if !madeAChange {
+		// if we loop through and didnt find a single cross over, exit!
+		if !foundACrossOver {
 			break
 		}
 
@@ -83,4 +78,14 @@ func SolvePartTwo(input string) int {
 	}
 
 	return answer
+}
+
+func hasAnyCrossover(r1, r2 [2]int) bool {
+	if (r1[0] >= r2[0] && r1[0] <= r2[1]) ||
+		(r1[1] >= r2[0] && r1[1] <= r2[1]) ||
+		(r2[0] >= r1[0] && r2[0] <= r1[1]) ||
+		(r2[1] >= r1[0] && r2[1] <= r1[1]) {
+		return true
+	}
+	return false
 }
