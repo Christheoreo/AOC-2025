@@ -5,7 +5,7 @@ import (
 )
 
 func TestPartOne(t *testing.T) {
-	expect := 3
+	expect := 4277556
 	got := SolvePartOne(exampleInput)
 	if got != expect {
 		t.Fatalf("wanted (%v) but got %v", expect, got)
