@@ -12,6 +12,7 @@ func SolvePartTwo(input string) int {
 	lines := strings.Split(input, "\n")
 	lineLength := len(lines[0])
 
+	// go to -1 as pos 0 will always be an operation
 	for col := lineLength - 1; col >= -1; col -= 1 {
 		total := 0
 		if col >= 0 {
@@ -31,17 +32,16 @@ func SolvePartTwo(input string) int {
 		}
 		if total == 0 {
 			// we found  nothing!
-			localTotal := 0
-			operation := lines[len(lines)-1][col+1]
-			for i, num := range numberSlots {
-				if operation == '+' {
-					localTotal += num
-				} else {
-					if i == 0 {
-						localTotal = num
-					} else {
-						localTotal *= num
-					}
+			localTotal := numberSlots[0]
+
+			// doing this instead of the loop then a operation check so that we just do the check once
+			if lines[len(lines)-1][col+1] != '+' {
+				for i := 1; i < len(numberSlots); i += 1 {
+					localTotal *= numberSlots[i]
+				}
+			} else {
+				for i := 1; i < len(numberSlots); i += 1 {
+					localTotal += numberSlots[i]
 				}
 			}
 			answer += localTotal
