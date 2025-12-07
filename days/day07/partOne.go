@@ -27,25 +27,6 @@ func SolvePartOne(input string) int {
 	return len(m)
 }
 
-// func partOneMoveDown(row, col int, lines [][]byte) (int, [][]byte) {
-// 	// move down one
-// 	timesSplit := 0
-// 	if row == len(lines)-1 {
-// 		return 0, [][]byte{}
-// 	}
-// 	char := lines[row][col]
-// 	if char == '^' {
-// 		timesSplit += 1
-// 		lines[row][col] = '.'
-// 		timesSplitLeft, newLines := partOneMoveDown(row, col-1, lines)
-// 		timesSplitRight, _ := partOneMoveDown(row, col+1, newLines)
-// 		timesSplit += timesSplitLeft + timesSplitRight
-// 	} else {
-// 		return partOneMoveDown(row+1, col, lines)
-// 	}
-// 	return timesSplit, lines
-// }
-
 func partOneMoveDown(row, col int, lines [][]byte, m map[string]interface{}) map[string]interface{} {
 
 	if row == len(lines)-1 {

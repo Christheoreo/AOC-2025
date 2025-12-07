@@ -12,9 +12,10 @@ var exampleInput string
 var input string
 
 func main() {
-	partOneAnswer := SolvePartOne(input)
+	// partOneAnswer := SolvePartOne(input)
 	// partOneAnswer := SolvePartOne(exampleInput)
-	// partTwoAnswer := SolvePartTwo(input)
-	fmt.Printf("Day 06 part 1 = %v\n", partOneAnswer)
-	// fmt.Printf("Day 06 part 2 = %v\n", partTwoAnswer)
+	partTwoAnswer := SolvePartTwo(input)
+	// partTwoAnswer := SolvePartTwo(exampleInput)
+	// fmt.Printf("Day 06 part 1 = %v\n", partOneAnswer)
+	fmt.Printf("Day 06 part 2 = %v\n", partTwoAnswer)
 }
