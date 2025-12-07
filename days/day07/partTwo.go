@@ -4,8 +4,6 @@ import (
 	"strings"
 )
 
-var reachedEnd int = 0
-
 func SolvePartTwo(input string) int {
 	// answer := 0
 	lines := strings.Split(input, "\n")
@@ -23,26 +21,20 @@ func SolvePartTwo(input string) int {
 		data = append(data, row)
 	}
 
-	partTwoMoveDown(0, startingIndex, data)
-
-	return reachedEnd
+	return partTwoMoveDown(0, startingIndex, data)
 }
 
-func partTwoMoveDown(row, col int, lines [][]byte) {
+func partTwoMoveDown(row, col int, lines [][]byte) int {
 
-	if row == len(lines)-1 || col < 0 || col > len(lines[0])-1 {
-		// fmt.Printf("XX - %d\n", timelines)
-		reachedEnd += 1
-		return
+	if row == len(lines)-1 {
+		return 1
 	}
 	char := lines[row][col]
 	if char != '^' {
-		partTwoMoveDown(row+1, col, lines)
-		return
+		return partTwoMoveDown(row+1, col, lines)
 	}
 
-	partTwoMoveDown(row, col-1, lines)
-	partTwoMoveDown(row, col+1, lines)
+	return partTwoMoveDown(row, col-1, lines) + partTwoMoveDown(row, col+1, lines)
 }
 
 // answer is how many ways can wr get to the bottom
