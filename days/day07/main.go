@@ -13,7 +13,8 @@ var input string
 
 func main() {
 	partOneAnswer := SolvePartOne(input)
-	partTwoAnswer := SolvePartTwo(input)
+	// partOneAnswer := SolvePartOne(exampleInput)
+	// partTwoAnswer := SolvePartTwo(input)
 	fmt.Printf("Day 06 part 1 = %v\n", partOneAnswer)
-	fmt.Printf("Day 06 part 2 = %v\n", partTwoAnswer)
+	// fmt.Printf("Day 06 part 2 = %v\n", partTwoAnswer)
 }
