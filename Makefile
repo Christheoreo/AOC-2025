@@ -22,3 +22,7 @@ day06-test:
 	go test ./days/day06/
 day06-bench:
 	go test -bench . -run '^$\' -benchmem ./days/day06
+day07-test:
+	go test ./days/day07/
+day07-bench:
+	go test -bench . -run '^$\' -benchmem ./days/day07
