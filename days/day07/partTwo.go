@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
+var m map[string]int = make(map[string]int)
+
+// THIS TOOK ME LIKE 3 HOURS!!!!!
 func SolvePartTwo(input string) int {
-	// answer := 0
 	lines := strings.Split(input, "\n")
 
 	startingIndex := strings.IndexByte(lines[0], 'S')
@@ -21,7 +24,8 @@ func SolvePartTwo(input string) int {
 		data = append(data, row)
 	}
 
-	return partTwoMoveDown(0, startingIndex, data)
+	t := partTwoMoveDown(0, startingIndex, data)
+	return t
 }
 
 func partTwoMoveDown(row, col int, lines [][]byte) int {
@@ -29,14 +33,17 @@ func partTwoMoveDown(row, col int, lines [][]byte) int {
 	if row == len(lines)-1 {
 		return 1
 	}
+
 	char := lines[row][col]
 	if char != '^' {
 		return partTwoMoveDown(row+1, col, lines)
 	}
+	key := fmt.Sprintf("%d-%d", row, col)
+	if val, ok := m[key]; ok {
+		return val
+	}
 
-	return partTwoMoveDown(row, col-1, lines) + partTwoMoveDown(row, col+1, lines)
+	total := partTwoMoveDown(row, col-1, lines) + partTwoMoveDown(row, col+1, lines)
+	m[key] = total
+	return total
 }
-
-// answer is how many ways can wr get to the bottom
-
-// so, start from the bottom and work out - store
