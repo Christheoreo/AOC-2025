@@ -12,7 +12,8 @@ var exampleInput string
 var input string
 
 func main() {
-	partOneAnswer := SolvePartOne(input)
+	// partOneAnswer := SolvePartOne(input,1000)
+	partOneAnswer := SolvePartOne(exampleInput, 10) // run in debugger to see what the value of distance is
 	// partTwoAnswer := SolvePartTwo(input)
 	fmt.Printf("Day 08 part 1 = %v\n", partOneAnswer)
 	// fmt.Printf("Day 08 part 2 = %v\n", partTwoAnswer)

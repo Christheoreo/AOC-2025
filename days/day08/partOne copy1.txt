@@ -1,0 +1,240 @@
+package main
+
+import (
+	"fmt"
+	"math"
+	"slices"
+	"strconv"
+	"strings"
+)
+
+type ListX [][3]int
+
+type CoordinateDistance struct {
+	A        *Coordinate
+	B        *Coordinate
+	Distance float64
+}
+
+type Coordinate struct {
+	X, Y, Z  int
+	ID       int
+	Closest  *Coordinate
+	Distance float64
+}
+
+func NewCoordinate(line string, index int) *Coordinate {
+	parts := strings.Split(line, ",")
+
+	x, _ := strconv.Atoi(parts[0])
+	y, _ := strconv.Atoi(parts[1])
+	z, _ := strconv.Atoi(parts[2])
+
+	return &Coordinate{
+		X:  x,
+		Y:  y,
+		Z:  z,
+		ID: index,
+	}
+}
+
+func (c *Coordinate) Ouput() string {
+	return fmt.Sprintf("%d,%d,%d", c.X, c.Y, c.Z)
+}
+
+func SolvePartOne(input string, connectionsLimit int) int {
+	// answer := 0
+	lines := strings.Split(input, "\n")
+	coordinates := make([]*Coordinate, 0)
+	// carry o nhere
+	// coordinatesDistance := make([]*CoordinateDistance, 0)
+	// circuitMap := make(map[int]int)
+	circuits := make([][]*Coordinate, 0)
+	for index, line := range lines {
+		coOrdinate := NewCoordinate(line, index)
+		coordinates = append(coordinates, coOrdinate)
+
+		circuit := make([]*Coordinate, 1)
+		circuit[0] = coOrdinate
+
+		circuits = append(circuits, circuit)
+	}
+	// smallestDistance := math.MaxFloat64
+	for i := 0; i < len(coordinates); i += 1 {
+		for k := i + 1; k < len(coordinates); k += 1 {
+			a := coordinates[i]
+			b := coordinates[k]
+
+			if i == k {
+				continue
+			}
+
+			distance := getDistance(*a, *b)
+
+			// if a.Closest == nil && b.Closest == nil {
+			// 	a.Closest = b
+			// 	a.Distance = distance
+			// 	continue
+			// }
+
+			if a.Closest == nil {
+				a.Closest = b
+				a.Distance = distance
+			} else if distance < a.Distance {
+				a.Closest = b
+				a.Distance = distance
+			}
+
+			if b.Closest == nil {
+				b.Closest = a
+				b.Distance = distance
+			} else if distance < b.Distance {
+				b.Closest = a
+				b.Distance = distance
+			}
+
+		}
+	}
+
+	slices.SortFunc(coordinates, func(a *Coordinate, b *Coordinate) int {
+		// mp(a, b) should return a negative number when a < b, a positive number when a > b and zero when a == b or a and b are incomparable in the sense of a strict weak ordering
+		if a.Distance < b.Distance {
+			return -1
+		}
+		if a.Distance > b.Distance {
+			return 1
+		}
+		return 0
+	})
+	connections := 0
+
+	// uniquePairs := make([]*Coordinate, 0)
+	// for _, c := range coordinates {
+	// 	found := false
+	// 	for _, v := range uniquePairs {
+	// 		// if v.ID == c.Closest.ID || v.Closest.ID == c.ID {
+	// 		if (v.ID == c.ID && v.Closest.ID == c.Closest.ID) || (c.ID == v.Closest.ID && c.Closest.ID == v.ID) {
+	// 			found = true
+	// 			break
+	// 		}
+	// 	}
+
+	// 	if !found {
+	// 		uniquePairs = append(uniquePairs, c)
+	// 	}
+	// }
+
+	for _, c := range coordinates {
+		// if connections == connectionsLimit {
+		// 	break
+		// }
+
+		// They are in the same circuit, so skip
+
+		aIndex := findCircuitIndex(c, circuits)
+		bIndex := findCircuitIndex(c.Closest, circuits)
+
+		// if they are in same circuit, then ignore
+		if aIndex == bIndex {
+			continue
+		}
+
+		// if either are already in a circuit, then also ignore
+		aCircuitLength := len(circuits[aIndex])
+		bCircuitLength := len(circuits[bIndex])
+
+		if aCircuitLength > 1 && bCircuitLength > 1 {
+			continue
+		}
+
+		// aCircuit := circuits[aIndex]
+		// bCircuit := circuits[bIndex]
+		connections += 1
+		circuits[bIndex] = append(circuits[bIndex], circuits[aIndex]...)
+		circuits[aIndex] = make([]*Coordinate, 0)
+
+		// if aCircuitLength == 1 {
+		// } else if bCircuitLength == 1 {
+		// 	connections += 1
+		// 	circuits[aIndex] = append(circuits[aIndex], circuits[bIndex]...)
+		// 	circuits[bIndex] = make([]*Coordinate, 0)
+
+		// }
+
+		// circuits[aIndex] = append(circuits[aIndex], bCircuit...)
+		// circuits[bIndex] = make([]*Coordinate, 0)
+
+		// aCircuitCount := circuitMap[cD.A.CircuitIndex]
+		// bCircuitCount := circuitMap[cD.B.CircuitIndex]
+
+		// if aCircuitCount >= bCircuitCount {
+		// 	cD.B.CircuitIndex =
+		// }
+
+		// if circuitMap[cD.A.CircuitIndex] == 1 {
+		// 	cD.A.CircuitIndex = cD.B.CircuitIndex
+		// 	circuitMap[cD.A.CircuitIndex] -= 1
+		// } else if circuitMap[cD.B.CircuitIndex] == 1 {
+		// 	cD.B.CircuitIndex = cD.A.CircuitIndex
+		// 	circuitMap[cD.B.CircuitIndex] -= 1
+		// }
+	}
+
+	// get the three largest circuits
+	var a, b, c int
+	for _, v := range circuits {
+		x := len(v)
+		if x > a {
+			c = b
+			b = a
+			a = x
+			continue
+		}
+
+		if x > b {
+			c = b
+			b = x
+			continue
+		}
+		if x > c {
+			c = x
+		}
+	}
+	fmt.Println(connections)
+	// Sort the coordinates
+	return a * b * c
+}
+
+func getDistance(a, b Coordinate) float64 {
+	distanceSquared := math.Pow(float64(a.X)-float64(b.X), 2) + math.Pow(float64(a.Y)-float64(b.Y), 2) + math.Pow(float64(a.Z)-float64(b.Z), 2)
+
+	return math.Sqrt(distanceSquared)
+}
+
+func findCircuitIndex(c *Coordinate, circuits [][]*Coordinate) int {
+	for i := 0; i < len(circuits); i += 1 {
+		for _, v := range circuits[i] {
+			if v.ID == c.ID {
+				return i
+			}
+		}
+	}
+	return -1
+}
+
+// func addAndOrder(list ListX, a, b, distance int) ListX {
+// 	newList := make(ListX, len(list)+1)
+// 	placementIndex := 0
+// 	for i := 0; i < len(list); i += 1 {
+// 		if distance < list[i][2] {
+// 			newList[placementIndex] = [3]int{a, b, distance}
+// 			placementIndex += 1
+// 			newList[placementIndex] = list[i]
+// 		} else {
+// 			newList[placementIndex] = list[placementIndex]
+// 		}
+// 		placementIndex += 1
+// 	}
+
+// 	return newList
+// }

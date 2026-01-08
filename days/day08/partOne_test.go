@@ -5,8 +5,8 @@ import (
 )
 
 func TestPartOne(t *testing.T) {
-	expect := 21
-	got := SolvePartOne(exampleInput)
+	expect := 40
+	got := SolvePartOne(exampleInput, 10)
 	if got != expect {
 		t.Fatalf("wanted (%v) but got %v", expect, got)
 	}
@@ -14,6 +14,6 @@ func TestPartOne(t *testing.T) {
 
 func BenchmarkPartOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		SolvePartOne(input)
+		SolvePartOne(input, 1000)
 	}
 }
